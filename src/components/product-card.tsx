@@ -22,6 +22,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const conversionRate = 83;
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </CardTitle>
         </CardContent>
         <CardFooter className="flex items-center justify-between p-4 pt-0">
-          <p className="text-xl font-bold font-headline">${product.price.toFixed(2)}</p>
+          <p className="text-xl font-bold font-headline">₹{(product.price * conversionRate).toFixed(2)}</p>
           <Button onClick={handleAddToCart} size="sm">
             <ShoppingCart className="mr-2 h-4 w-4" />
             Add to Cart
