@@ -38,7 +38,7 @@ export default function ProductListClient() {
     fetchProducts();
   }, []);
 
-  const filteredAndSortedProducts = useMemo(() => {
+  const categorizedProducts = useMemo(() => {
     let filtered = products.filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -54,22 +54,32 @@ export default function ProductListClient() {
         filtered.sort((a, b) => b.rating.rate - a.rating.rate);
         break;
       default:
-        // 'relevance' - no sort needed, keep original order
+        // 'relevance' keeps original order, which is fine before grouping
         break;
     }
-    return filtered;
+
+    return filtered.reduce((acc, product) => {
+      const category = product.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(product);
+      return acc;
+    }, {} as Record<string, Product[]>);
   }, [products, searchTerm, sortBy]);
 
   const renderSkeletons = () => (
-    Array.from({ length: 8 }).map((_, i) => (
-      <div key={i} className="flex flex-col space-y-3">
-        <Skeleton className="h-64 w-full rounded-lg" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-1/4" />
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="flex flex-col space-y-3">
+          <Skeleton className="h-64 w-full rounded-lg" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-1/4" />
+          </div>
         </div>
-      </div>
-    ))
+      ))}
+    </div>
   );
 
   if (error) {
@@ -104,11 +114,24 @@ export default function ProductListClient() {
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {loading ? renderSkeletons() : filteredAndSortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {loading ? (
+        renderSkeletons()
+      ) : (
+        <div className="space-y-12">
+          {Object.entries(categorizedProducts).map(([category, items]) => (
+            <div key={category}>
+              <h2 className="mb-6 text-2xl font-bold font-headline capitalize">
+                {category}
+              </h2>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {items.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
