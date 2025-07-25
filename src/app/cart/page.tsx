@@ -85,7 +85,7 @@ export default function CartPage() {
                       <TableCell>
                         <div className="font-medium">{item.title}</div>
                         <div className="text-sm text-muted-foreground">
-                        ₹{(item.price * conversionRate).toFixed(2)}
+                        Rs. {(item.price * conversionRate).toFixed(2)}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -125,7 +125,7 @@ export default function CartPage() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                      ₹{(item.price * item.quantity * conversionRate).toFixed(2)}
+                      Rs. {(item.price * item.quantity * conversionRate).toFixed(2)}
                       </TableCell>
                       <TableCell>
                         <Button
@@ -153,7 +153,7 @@ export default function CartPage() {
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>₹{inrCartTotal.toFixed(2)}</span>
+                <span>Rs. {inrCartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
@@ -161,7 +161,7 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between border-t pt-4 text-lg font-bold">
                 <span>Total</span>
-                <span>₹{inrCartTotal.toFixed(2)}</span>
+                <span>Rs. {inrCartTotal.toFixed(2)}</span>
               </div>
             </CardContent>
             <CardFooter>

@@ -48,7 +48,7 @@ export default function ProductDetailsClient({ product }: { product: Product }) 
             </span>
           </div>
           <p className="mb-6 text-3xl font-bold text-primary font-headline">
-          ₹{(product.price * conversionRate).toFixed(2)}
+          Rs. {(product.price * conversionRate).toFixed(2)}
           </p>
           <p className="mb-8 text-foreground/80 leading-relaxed">
             {product.description}
